@@ -7,150 +7,443 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* =============================================
+       RESEARCH-BACKED DARK THEME
+       Sources: GitHub Primer, WCAG AAA, Material Design 3,
+       Smashing Magazine, Practical Typography
+       ============================================= */
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0d1117;
-      color: #c9d1d9;
-      line-height: 1.6;
+    :root {
+      /* Backgrounds — GitHub Primer dark */
+      --bg-canvas: #0d1117;
+      --bg-surface: #161b22;
+      --bg-overlay: #1c2128;
+      --bg-inset: #010409;
+
+      /* Text — WCAG AAA compliant */
+      --text-primary: #e6edf3;    /* 14.5:1 contrast vs canvas */
+      --text-heading: #f0f6fc;    /* 15.8:1 contrast */
+      --text-secondary: #8b949e;  /* 5.7:1 contrast (AA) */
+      --text-muted: #6e7681;      /* 3.9:1 */
+
+      /* Borders */
+      --border-default: #30363d;
+      --border-subtle: #21262d;
+      --border-emphasis: #6e7681;
+
+      /* Accents — desaturated for dark mode */
+      --accent-blue: #58a6ff;
+      --accent-blue-hover: #79c0ff;
+      --accent-blue-emphasis: #1f6feb;
+      --accent-green: #3fb950;
+      --accent-red: #f85149;
+      --accent-yellow: #d29922;
+      --accent-purple: #bc8cff;
+
+      /* Typography — Major Third scale (1.250) */
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --font-size-base: 16px;
+      --line-height-body: 1.65;
+      --line-height-heading: 1.25;
+      --line-height-code: 1.55;
+
+      /* Layout */
+      --content-width: 768px;
+      --nav-height: 52px;
+      --toc-width: 220px;
     }
 
-    /* Navigation */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-body);
+      color: var(--text-primary);
+      background: var(--bg-canvas);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* === SCROLL PROGRESS BAR === */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent-blue);
+      z-index: 200;
+      transition: width 80ms ease-out;
+      width: 0%;
+    }
+
+    /* === NAVIGATION === */
     .doc-nav {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #161b22;
-      border-bottom: 2px solid #4ecdc4;
+      height: var(--nav-height);
+      background: rgba(13, 17, 23, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
-      flex-wrap: wrap;
-      font-size: 14px;
+      align-items: center;
+      padding: 0 24px;
+      gap: 0;
     }
     .doc-nav a {
-      color: #8b949e;
+      color: var(--text-secondary);
       text-decoration: none;
-      padding: 12px 18px;
-      transition: background 0.2s, color 0.2s;
+      font-size: 0.875rem;
+      padding: 0 14px;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
       white-space: nowrap;
-      border-right: 1px solid #21262d;
     }
-    .doc-nav a:hover { background: #21262d; color: #f0f6fc; }
-    .doc-nav a.active { background: #4ecdc4; color: #0d1117; font-weight: 600; }
-    .doc-nav a.home { font-weight: 700; color: #4ecdc4; }
-    .doc-nav a.home:hover { background: #4ecdc4; color: #0d1117; }
+    .doc-nav a:hover {
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .doc-nav a.active {
+      color: var(--text-heading);
+      border-bottom-color: var(--accent-blue);
+    }
+    .doc-nav a.home {
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-right: 8px;
+      padding-left: 0;
+    }
 
-    /* Main content */
-    .main-content {
-      max-width: 980px;
+    /* === LAYOUT: Content + TOC === */
+    .page-wrapper {
+      display: flex;
+      max-width: calc(var(--content-width) + var(--toc-width) + 80px);
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 0 24px;
     }
 
-    /* Typography */
-    h1 { color: #f0f6fc; font-size: 2em; margin: 24px 0 16px; border-bottom: 1px solid #21262d; padding-bottom: 8px; }
-    h2 { color: #f0f6fc; font-size: 1.5em; margin: 24px 0 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
-    h3 { color: #e6edf3; font-size: 1.25em; margin: 20px 0 10px; }
-    h4 { color: #e6edf3; font-size: 1.1em; margin: 16px 0 8px; }
-    p { margin: 8px 0 16px; }
-    a { color: #4ecdc4; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    strong { color: #e6edf3; }
-
-    blockquote {
-      border-left: 4px solid #4ecdc4;
-      padding: 8px 16px;
-      margin: 16px 0;
-      background: #161b22;
-      border-radius: 0 6px 6px 0;
+    .main-content {
+      flex: 1;
+      max-width: var(--content-width);
+      padding: 32px 0;
+      min-width: 0;
     }
 
-    code {
-      background: #161b22;
-      padding: 2px 6px;
+    /* === TABLE OF CONTENTS (right sidebar) === */
+    .toc-sidebar {
+      width: var(--toc-width);
+      flex-shrink: 0;
+      margin-left: 40px;
+      display: none;
+    }
+    .toc-sidebar .toc {
+      position: sticky;
+      top: calc(var(--nav-height) + 32px);
+      max-height: calc(100vh - var(--nav-height) - 64px);
+      overflow-y: auto;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      padding-bottom: 24px;
+    }
+    .toc-sidebar .toc-title {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .toc-sidebar .toc a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: block;
+      padding: 4px 0 4px 12px;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .toc-sidebar .toc a:hover {
+      color: var(--text-primary);
+    }
+    .toc-sidebar .toc a.active {
+      color: var(--text-heading);
+      border-left-color: var(--accent-blue);
+    }
+    .toc-sidebar .toc a.toc-h3 {
+      padding-left: 24px;
+      font-size: 0.75rem;
+    }
+
+    @media (min-width: 1100px) {
+      .toc-sidebar { display: block; }
+    }
+
+    /* === TYPOGRAPHY === */
+    h1, h2, h3, h4 {
+      color: var(--text-heading);
+      font-weight: 600;
+      line-height: var(--line-height-heading);
+    }
+    h1 {
+      font-size: 2rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border-subtle);
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--border-subtle);
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-size: 1.25rem;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    h4 {
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; max-width: 70ch; }
+
+    strong { color: var(--text-heading); }
+
+    /* === LINKS === */
+    a { color: var(--accent-blue); text-decoration: none; }
+    a:hover { color: var(--accent-blue-hover); text-decoration: underline; }
+
+    /* === CODE === */
+    code:not(pre code) {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      padding: 0.15em 0.4em;
+      background: rgba(110, 118, 129, 0.25);
       border-radius: 4px;
-      font-size: 0.9em;
-      color: #e6edf3;
+      color: var(--text-primary);
     }
     pre {
-      background: #161b22;
-      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: var(--line-height-code);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
       border-radius: 8px;
+      padding: 16px 20px;
+      margin: 1.5rem 0;
       overflow-x: auto;
-      margin: 16px 0;
-      border: 1px solid #21262d;
     }
-    pre code { background: none; padding: 0; }
+    pre code { background: none; padding: 0; font-size: inherit; }
 
-    /* Tables */
-    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-    th { background: #161b22; color: #f0f6fc; font-weight: 600; text-align: left; padding: 10px 12px; border: 1px solid #21262d; }
-    td { padding: 8px 12px; border: 1px solid #21262d; }
-    tr:nth-child(even) { background: #0d1117; }
-    tr:nth-child(odd) { background: #161b22; }
+    /* === TABLES === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border-default);
+      margin: 1.5rem 0;
+      font-size: 0.875rem;
+    }
+    th {
+      background: var(--bg-surface);
+      color: var(--text-heading);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 2px solid var(--border-default);
+    }
+    td {
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      line-height: 1.45;
+    }
+    tr:nth-child(even) { background: rgba(22, 27, 34, 0.5); }
+    tr:hover { background: rgba(48, 54, 61, 0.4); }
 
-    /* Mermaid diagrams — light background, high contrast */
+    /* === BLOCKQUOTES === */
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent-blue-emphasis);
+      background: rgba(31, 111, 235, 0.08);
+      color: var(--text-primary);
+      border-radius: 0 6px 6px 0;
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    /* === MERMAID DIAGRAMS === */
     .mermaid {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 24px 16px;
-      margin: 20px 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 24px 20px;
+      margin: 1.5rem 0;
       text-align: center;
-      border: 1px solid #30363d;
       overflow-x: auto;
     }
-    .mermaid svg {
-      max-width: 100%;
-      height: auto !important;
-    }
+    .mermaid svg { max-width: 100%; height: auto !important; }
 
-    /* Loading placeholder */
+    /* Loading state */
     pre code.language-mermaid {
       display: block;
-      background: #161b22;
-      color: #8b949e;
-      padding: 24px;
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      padding: 32px 20px;
       border-radius: 8px;
       text-align: center;
-      font-size: 14px;
-      border: 1px dashed #30363d;
-    }
-    pre code.language-mermaid::before {
-      content: "⏳ Rendering diagram...";
-      display: block;
-      margin-bottom: 8px;
-      font-style: italic;
+      font-size: 0.875rem;
+      border: 1px dashed var(--border-default);
     }
 
-    hr { border: none; border-top: 1px solid #21262d; margin: 24px 0; }
-    ul, ol { padding-left: 24px; margin: 8px 0 16px; }
-    li { margin: 4px 0; }
+    /* === HORIZONTAL RULES === */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      margin: 2rem 0;
+    }
 
-    /* Responsive */
+    /* === LISTS === */
+    ul, ol { padding-left: 1.5em; margin-bottom: 1rem; }
+    li { margin-bottom: 0.25rem; }
+
+    /* === GISCUS === */
+    .giscus-wrapper {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .giscus-wrapper .giscus-title {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    /* === BACK TO TOP === */
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-overlay);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, background 0.15s;
+      font-size: 1.2rem;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:hover { background: var(--border-default); }
+
+    /* === FOCUS STATES === */
+    :focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* === ACCESSIBILITY === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    @media (forced-colors: active) {
+      :focus-visible { outline: 2px solid CanvasText; }
+    }
+
+    /* === RESPONSIVE === */
     @media (max-width: 768px) {
-      .doc-nav a { padding: 10px 12px; font-size: 12px; }
-      .main-content { padding: 16px 12px; }
-      table { font-size: 12px; }
-      th, td { padding: 6px 8px; }
-      .mermaid { padding: 12px 8px; }
+      .doc-nav { padding: 0 12px; overflow-x: auto; }
+      .doc-nav a { padding: 0 10px; font-size: 0.8125rem; }
+      .page-wrapper { padding: 0 16px; }
+      .main-content { padding: 20px 0; }
+      table { font-size: 0.8125rem; }
+      th, td { padding: 6px 10px; }
+      .mermaid { padding: 16px 12px; }
     }
   </style>
 </head>
 <body>
+  <!-- Scroll Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation -->
   <nav class="doc-nav">
-    <a href="{{ '/' | relative_url }}" class="home" {% if page.url == '/' or page.url == '/index.html' %}style="background:#4ecdc4;color:#0d1117"{% endif %}>Index</a>
-    <a href="{{ '/RESEARCH_SUMMARY' | relative_url }}" {% if page.url contains 'RESEARCH_SUMMARY' %}class="active"{% endif %}>Research Summary</a>
-    <a href="{{ '/COMPETITIVE_ANALYSIS' | relative_url }}" {% if page.url contains 'COMPETITIVE_ANALYSIS' %}class="active"{% endif %}>Competitive Analysis</a>
+    <a href="{{ '/' | relative_url }}" class="home" {% if page.url == '/' or page.url == '/index.html' %}style="border-bottom-color: var(--accent-blue)"{% endif %}>Docs</a>
+    <a href="{{ '/RESEARCH_SUMMARY' | relative_url }}" {% if page.url contains 'RESEARCH_SUMMARY' %}class="active"{% endif %}>Research</a>
+    <a href="{{ '/COMPETITIVE_ANALYSIS' | relative_url }}" {% if page.url contains 'COMPETITIVE_ANALYSIS' %}class="active"{% endif %}>Competitive</a>
     <a href="{{ '/SPEC' | relative_url }}" {% if page.url contains 'SPEC' %}class="active"{% endif %}>Spec</a>
-    <a href="{{ '/CODEBASE_AUDIT' | relative_url }}" {% if page.url contains 'CODEBASE_AUDIT' %}class="active"{% endif %}>Codebase Audit</a>
+    <a href="{{ '/CODEBASE_AUDIT' | relative_url }}" {% if page.url contains 'CODEBASE_AUDIT' %}class="active"{% endif %}>Audit</a>
     <a href="{{ '/IMPLEMENTATION_ROADMAP' | relative_url }}" {% if page.url contains 'IMPLEMENTATION_ROADMAP' %}class="active"{% endif %}>Roadmap</a>
   </nav>
-  <div class="main-content">
-    {{ content }}
+
+  <!-- Page Layout -->
+  <div class="page-wrapper">
+    <main class="main-content" id="content">
+      {{ content }}
+
+      <!-- Giscus Comments -->
+      <div class="giscus-wrapper">
+        <div class="giscus-title">Feedback & Discussion</div>
+        <script src="https://giscus.app/client.js"
+          data-repo="Prathamesh1Mhatre/ai-output-readability-research"
+          data-repo-id="R_kgDORmt9ww"
+          data-category="Announcements"
+          data-category-id="DIC_kwDORmt9w84C4XZS"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="dark_dimmed"
+          data-lang="en"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    </main>
+
+    <!-- Table of Contents (auto-generated) -->
+    <aside class="toc-sidebar">
+      <nav class="toc" id="toc">
+        <div class="toc-title">On this page</div>
+      </nav>
+    </aside>
   </div>
 
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">&#8593;</button>
+
+  <!-- === SCRIPTS === -->
   <script type="module">
-    // Convert ```mermaid code blocks to renderable divs
+    // 1. Convert mermaid code blocks to renderable divs
     document.querySelectorAll('pre code.language-mermaid').forEach(block => {
       const div = document.createElement('div');
       div.className = 'mermaid';
@@ -158,30 +451,104 @@
       block.closest('pre').replaceWith(div);
     });
 
-    // Load and render Mermaid — light theme for white container
+    // 2. Load and render Mermaid with custom dark base theme
     const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'default',
+      theme: 'base',
       securityLevel: 'loose',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      fontSize: 14,
+      themeVariables: {
+        primaryColor: '#2d3250',
+        primaryTextColor: '#e0e0e8',
+        primaryBorderColor: '#4a5280',
+        secondaryColor: '#1a2744',
+        secondaryTextColor: '#c8ccd8',
+        secondaryBorderColor: '#3d4a6b',
+        tertiaryColor: '#1e2940',
+        tertiaryTextColor: '#b8bcc8',
+        tertiaryBorderColor: '#3a4560',
+        lineColor: '#6b7a96',
+        textColor: '#d4d8e4',
+        mainBkg: '#2d3250',
+        nodeBorder: '#4a5280',
+        clusterBkg: '#1a1d35',
+        clusterBorder: '#3a3d55',
+        titleColor: '#e8ecf4',
+        edgeLabelBackground: '#1e2035',
+        noteBkgColor: '#2a2d48',
+        noteTextColor: '#d4d8e4',
+        noteBorderColor: '#4a5280',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        fontSize: '14px',
+        background: '#161b22',
+        arrowheadColor: '#8b95a5'
+      },
       flowchart: {
         useMaxWidth: true,
         htmlLabels: true,
         curve: 'basis',
-        padding: 16,
+        padding: 15,
         nodeSpacing: 50,
         rankSpacing: 50
       },
       gantt: {
         useMaxWidth: true,
-        fontSize: 12,
+        fontSize: 13,
         barHeight: 24,
-        barGap: 6
+        barGap: 4
       }
     });
     await mermaid.run();
+  </script>
+
+  <script>
+    // 3. Auto-generate Table of Contents
+    (function() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('.main-content h2, .main-content h3');
+      if (headings.length === 0) return;
+
+      headings.forEach((heading, i) => {
+        if (!heading.id) heading.id = 'section-' + i;
+        const link = document.createElement('a');
+        link.href = '#' + heading.id;
+        link.textContent = heading.textContent;
+        link.className = heading.tagName === 'H3' ? 'toc-h3' : '';
+        toc.appendChild(link);
+      });
+
+      // Intersection Observer for active highlighting
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            toc.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const active = toc.querySelector('a[href="#' + entry.target.id + '"]');
+            if (active) active.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-80px 0px -70% 0px' });
+
+      headings.forEach(h => observer.observe(h));
+    })();
+
+    // 4. Scroll Progress Bar
+    (function() {
+      const bar = document.getElementById('progressBar');
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+      }, { passive: true });
+    })();
+
+    // 5. Back to Top Button
+    (function() {
+      const btn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > window.innerHeight * 2);
+      }, { passive: true });
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    })();
   </script>
 </body>
 </html>
