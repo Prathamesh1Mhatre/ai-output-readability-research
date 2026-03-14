@@ -165,10 +165,33 @@
       th, td { padding: 6px 8px; }
     }
   </style>
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-  </script>
+  <!-- Preconnect to CDN for faster fetch -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <style>
+    /* Loading placeholder while Mermaid loads */
+    pre code.language-mermaid {
+      display: block;
+      background: #161b22;
+      color: #4ecdc4;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 13px;
+      border: 1px dashed #4ecdc4;
+    }
+    pre code.language-mermaid::before {
+      content: "Loading diagram...";
+      display: block;
+      color: #8b949e;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .mermaid svg {
+      max-width: 100%;
+    }
+  </style>
 </head>
 <body>
   <nav class="doc-nav">
@@ -182,5 +205,28 @@
   <div class="main-content">
     {{ content }}
   </div>
+
+  <!-- Load Mermaid AFTER page content renders (non-blocking) -->
+  <script type="module">
+    // Convert ```mermaid code blocks to <div class="mermaid"> for rendering
+    document.querySelectorAll('pre code.language-mermaid').forEach(block => {
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = block.textContent;
+      block.closest('pre').replaceWith(div);
+    });
+
+    // Load Mermaid with minimal config
+    const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      securityLevel: 'loose',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      flowchart: { useMaxWidth: true, htmlLabels: true },
+      gantt: { useMaxWidth: true }
+    });
+    await mermaid.run();
+  </script>
 </body>
 </html>
