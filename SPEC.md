@@ -1,17 +1,10 @@
 ---
 layout: default
+title: "AI Output Readability — Spec"
 ---
 
----
-task_id: READABILITY-001
-title: "AI Output Readability — Visual-First, Concise Agent Output"
-type: feature
-complexity: L
-has_ui_changes: false
-has_api_changes: false
-has_db_changes: false
-squad_impact: [1, 2, 3, 4, 5, 7, 8, 9]
----
+> **task_id:** READABILITY-001 | **type:** feature | **complexity:** L | **squads:** 1, 2, 3, 4, 5, 7, 8, 9
+> **has_ui_changes:** false | **has_api_changes:** false | **has_db_changes:** false
 
 # SPEC: AI Output Readability
 
