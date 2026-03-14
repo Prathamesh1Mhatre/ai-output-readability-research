@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    .doc-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #161b22;
+      border-bottom: 2px solid #4ecdc4;
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 14px;
+    }
+    .doc-nav a {
+      color: #8b949e;
+      text-decoration: none;
+      padding: 12px 18px;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+      border-right: 1px solid #21262d;
+    }
+    .doc-nav a:hover {
+      background: #21262d;
+      color: #f0f6fc;
+    }
+    .doc-nav a.active {
+      background: #4ecdc4;
+      color: #0d1117;
+      font-weight: 600;
+    }
+    .doc-nav a.home {
+      font-weight: 700;
+      color: #4ecdc4;
+      letter-spacing: 0.5px;
+    }
+    .doc-nav a.home:hover {
+      background: #4ecdc4;
+      color: #0d1117;
+    }
+
+    /* Main content */
+    .main-content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Typography */
+    h1 { color: #f0f6fc; font-size: 2em; margin: 24px 0 16px; border-bottom: 1px solid #21262d; padding-bottom: 8px; }
+    h2 { color: #f0f6fc; font-size: 1.5em; margin: 24px 0 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
+    h3 { color: #e6edf3; font-size: 1.25em; margin: 20px 0 10px; }
+    h4 { color: #e6edf3; font-size: 1.1em; margin: 16px 0 8px; }
+
+    p { margin: 8px 0 16px; }
+
+    a { color: #4ecdc4; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    strong { color: #e6edf3; }
+
+    blockquote {
+      border-left: 4px solid #4ecdc4;
+      padding: 8px 16px;
+      margin: 16px 0;
+      background: #161b22;
+      border-radius: 0 6px 6px 0;
+    }
+
+    code {
+      background: #161b22;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: #e6edf3;
+    }
+
+    pre {
+      background: #161b22;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 16px 0;
+      border: 1px solid #21262d;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th {
+      background: #161b22;
+      color: #f0f6fc;
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 12px;
+      border: 1px solid #21262d;
+    }
+    td {
+      padding: 8px 12px;
+      border: 1px solid #21262d;
+    }
+    tr:nth-child(even) {
+      background: #0d1117;
+    }
+    tr:nth-child(odd) {
+      background: #161b22;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid {
+      background: #f6f8fa;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    /* Horizontal rules */
+    hr {
+      border: none;
+      border-top: 1px solid #21262d;
+      margin: 24px 0;
+    }
+
+    /* Lists */
+    ul, ol {
+      padding-left: 24px;
+      margin: 8px 0 16px;
+    }
+    li {
+      margin: 4px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .doc-nav a {
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+      .main-content {
+        padding: 16px 12px;
+      }
+      table { font-size: 12px; }
+      th, td { padding: 6px 8px; }
+    }
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  </script>
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="{{ '/' | relative_url }}" class="home" {% if page.url == '/' or page.url == '/index.html' %}style="background:#4ecdc4;color:#0d1117"{% endif %}>Index</a>
+    <a href="{{ '/RESEARCH_SUMMARY' | relative_url }}" {% if page.url contains 'RESEARCH_SUMMARY' %}class="active"{% endif %}>Research Summary</a>
+    <a href="{{ '/COMPETITIVE_ANALYSIS' | relative_url }}" {% if page.url contains 'COMPETITIVE_ANALYSIS' %}class="active"{% endif %}>Competitive Analysis</a>
+    <a href="{{ '/SPEC' | relative_url }}" {% if page.url contains 'SPEC' and page.url contains 'SPEC.' %}class="active"{% endif %}>Spec</a>
+    <a href="{{ '/CODEBASE_AUDIT' | relative_url }}" {% if page.url contains 'CODEBASE_AUDIT' %}class="active"{% endif %}>Codebase Audit</a>
+    <a href="{{ '/IMPLEMENTATION_ROADMAP' | relative_url }}" {% if page.url contains 'IMPLEMENTATION_ROADMAP' %}class="active"{% endif %}>Roadmap</a>
+  </nav>
+  <div class="main-content">
+    {{ content }}
+  </div>
+</body>
+</html>

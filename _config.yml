@@ -1,3 +1,3 @@
 title: AI Output Readability — Research Package
 description: Research, spec, and implementation roadmap for improving AI-generated documentation readability
-theme: jekyll-theme-cayman
+baseurl: /ai-output-readability-research

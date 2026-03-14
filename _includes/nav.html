@@ -1,0 +1,8 @@
+<nav class="doc-nav">
+  <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Index</a>
+  <a href="{{ '/RESEARCH_SUMMARY' | relative_url }}" {% if page.url contains 'RESEARCH_SUMMARY' %}class="active"{% endif %}>Research Summary</a>
+  <a href="{{ '/COMPETITIVE_ANALYSIS' | relative_url }}" {% if page.url contains 'COMPETITIVE_ANALYSIS' %}class="active"{% endif %}>Competitive Analysis</a>
+  <a href="{{ '/SPEC' | relative_url }}" {% if page.url contains 'SPEC' %}class="active"{% endif %}>Spec</a>
+  <a href="{{ '/CODEBASE_AUDIT' | relative_url }}" {% if page.url contains 'CODEBASE_AUDIT' %}class="active"{% endif %}>Codebase Audit</a>
+  <a href="{{ '/IMPLEMENTATION_ROADMAP' | relative_url }}" {% if page.url contains 'IMPLEMENTATION_ROADMAP' %}class="active"{% endif %}>Roadmap</a>
+</nav>

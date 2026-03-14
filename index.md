@@ -43,7 +43,3 @@ Plan       ──→ Implementation Roadmap (how + when)
 | Sprints to complete | 5 |
 | New deliverables | 7 |
 
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true, theme: 'default' });
-</script>
